@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "protocol": "/components/protocol/index",
+    "privacy-policy": "/components/privacy-policy/index"
+  }
+}

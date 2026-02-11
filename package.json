@@ -1,0 +1,25 @@
+{
+  "name": "miniprogram-ts-sass-quickstart",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev:uno": "unocss \"miniprogram/**/*.wxml\" -o miniprogram/unocss.wxss --watch",
+    "build:uno": "unocss \"miniprogram/**/*.wxml\" -o miniprogram/unocss.wxss"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@iconify-json/tabler": "^1.2.26",
+    "@unocss/cli": "^66.6.0",
+    "miniprogram-api-typings": "^2.8.3-1",
+    "unocss": "^66.6.0",
+    "unocss-preset-weapp": "^66.0.2"
+  },
+  "dependencies": {
+    "cos-wx-sdk-v5": "^1.8.0",
+    "tdesign-miniprogram": "^1.12.3"
+  },
+  "main": "index.js",
+  "type": "commonjs"
+}

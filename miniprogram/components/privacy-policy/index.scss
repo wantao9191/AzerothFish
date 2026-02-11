@@ -1,0 +1,64 @@
+.protocol-container {
+  height: 100%;
+  background-color: #fff;
+}
+
+.protocol-content {
+  padding: 32rpx;
+  color: #333;
+  line-height: 1.6;
+  font-size: 28rpx;
+
+  .h1 {
+    font-size: 40rpx;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40rpx;
+    color: #000;
+  }
+
+  .section {
+    margin-bottom: 40rpx;
+  }
+
+  .h2 {
+    font-size: 32rpx;
+    font-weight: bold;
+    margin: 32rpx 0 16rpx;
+    color: #000;
+  }
+
+  .h3 {
+    font-size: 28rpx;
+    font-weight: bold;
+    margin: 24rpx 0 12rpx;
+    color: #333;
+  }
+
+  .p {
+    margin-bottom: 16rpx;
+    text-align: justify;
+  }
+
+  .strong {
+    font-weight: bold;
+    color: #000;
+  }
+
+  .li {
+    margin-bottom: 8rpx;
+    padding-left: 32rpx;
+    position: relative;
+    
+    &::before {
+      content: "";
+      position: absolute;
+      left: 12rpx;
+      top: 18rpx;
+      width: 8rpx;
+      height: 8rpx;
+      background-color: #666;
+      border-radius: 50%;
+    }
+  }
+}

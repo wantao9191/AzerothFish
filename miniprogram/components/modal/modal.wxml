@@ -1,0 +1,24 @@
+<view class="fixed inset-0 z-100 transition-all duration-300 {{show ? 'visible opacity-100' : 'invisible opacity-0'}}" catchtouchmove="preventTouch">
+    <!-- 背景遮罩 -->
+    <view class="absolute inset-0 backdrop-blur-sm bg-black/60" bindtap="onCancel"></view>
+    <!-- 弹窗主体 -->
+    <view class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg-card rounded-md shadow-2xl overflow-hidden flex flex-col transform transition-transform duration-300 w-[85%] {{show ? 'scale-100' : 'scale-90'}}">
+        <!-- 标题 -->
+        <view wx:if="{{title}}" class="px-6 pt-8 pb-4 text-center">
+            <text class="text-xl font-bold text-text-main">{{title}}</text>
+        </view>
+        <!-- 内容区域 -->
+        <view class="px-6 py-4 flex-1 text-text-regular">
+            <slot></slot>
+        </view>
+        <!-- 底部按钮 -->
+        <view class="flex border-t border-border-base mt-4">
+            <view wx:if="{{showCancel}}" class="flex-1 py-4 text-center text-text-secondary font-medium active:bg-bg-page transition-colors border-r border-border-base" bindtap="onCancel">
+                {{cancelText}}
+            </view>
+            <view class="flex-1 py-4 text-center text-primary font-bold active:bg-primary/10 transition-colors" bindtap="onConfirm">
+                {{confirmText}}
+            </view>
+        </view>
+    </view>
+</view>

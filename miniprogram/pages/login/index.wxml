@@ -1,0 +1,75 @@
+<!-- pages/login/index.wxml -->
+<view class="login-container">
+  <!-- 背景图 -->
+  <image src="https://wantapp-1303245534.cos.ap-nanjing.myqcloud.com/uploads/login-banner.png" class="login-bg" />
+  <!-- 背景遮罩 -->
+  <view class="login-mask"></view>
+  
+  <!-- 顶部装饰光晕 -->
+  <view class="login-decoration"></view>
+  
+  <!-- 内容区域 -->
+  <view class="login-content">
+    <!-- 标题 -->
+    <view class="header-section">
+      <view class="app-title">欢迎来到 AzerothFish</view>
+      <view class="app-slogan">探索摸鱼乐趣</view>
+    </view>
+
+    <!-- 按钮组 -->
+    <view class="action-section">
+      <t-button 
+        theme="primary" 
+        size="large" 
+        block 
+        class="login-btn-wrapper"
+        t-class="login-btn"
+        bind:tap="handleLogin"
+      >
+        一键登录
+      </t-button>
+    </view>
+  </view>
+
+  <!-- 底部协议 -->
+  <view class="footer-section">
+    <view 
+      class="checkbox {{isAgree ? 'checked' : ''}}"
+      bind:tap="onAgreeChange"
+    >
+      <view wx:if="{{isAgree}}" class="i-tabler-check icon-check"></view>
+    </view>
+    <view class="agreement-text">
+      <view bind:tap="onAgreeChange" class="inline-block">我已阅读并同意</view> 
+      <text class="link" catch:tap="openProtocol">《用户协议》</text> 和 
+      <text class="link" catch:tap="openPrivacy">《隐私政策》</text>
+    </view>
+  </view>
+
+  <!-- 协议弹窗 -->
+  <t-popup visible="{{showProtocol}}" bind:visible-change="closePopups" placement="bottom" style="height: 60vh;" close-btn="{{true}}">
+    <view class="popup-container">
+      <view class="popup-header">用户服务协议</view>
+      <view class="popup-content">
+        <protocol style="height: 100%; width: 100%; display: block;" />
+      </view>
+      <view class="popup-footer">
+        <t-button theme="primary" block size="large" t-class="popup-btn" bind:tap="closePopups">我知道了</t-button>
+      </view>
+    </view>
+  </t-popup>
+
+  <!-- 隐私政策弹窗 -->
+  <t-popup visible="{{showPrivacy}}" bind:visible-change="closePopups" placement="bottom" style="height: 60vh;" close-btn="{{true}}">
+    <view class="popup-container">
+      <view class="popup-header">隐私政策</view>
+      <view class="popup-content">
+        <privacy-policy style="height: 100%; width: 100%; display: block;" />
+      </view>
+      <view class="popup-footer">
+        <t-button theme="primary" block size="large" t-class="popup-btn" bind:tap="closePopups">我知道了</t-button>
+      </view>
+    </view>
+  </t-popup>
+</view>
+<t-toast id="t-toast" />

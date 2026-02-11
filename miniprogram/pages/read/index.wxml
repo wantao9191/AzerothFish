@@ -1,0 +1,109 @@
+<navigation-bar title="{{book.title}}" back="{{true}}"></navigation-bar>
+<view class="h-screen flex flex-col overflow-hidden bg-bg-page">
+
+  <!-- 内容滚动区 -->
+  <scroll-view 
+    class="flex-1 w-full h-0 bg-bg-card" 
+    scroll-y="{{true}}" 
+    enable-back-to-top 
+    show-scrollbar="{{false}}" 
+    bindscroll="onScroll" 
+    scroll-top="{{scrollTop}}"
+    bindtap="toggleSettings"
+  >
+    <view class="px-40rpx py-48rpx min-h-full box-border">
+      <!-- 上一章按钮 -->
+      <view 
+        wx:if='{{chapters.orderIndex > 1}}' 
+        catch:tap='previousChapter' 
+        class="mb-64rpx btn btn-primary btn-md text-center shadow-sm"
+      >上一章</view>
+      
+      <!-- 章节标题 -->
+      <view class="text-title font-bold text-text-main mb-48rpx leading-tight">{{chapters.title}}</view>
+      
+      <!-- 章节内容 -->
+      <text class="text-body text-text-regular leading-loose block mb-96rpx text-justify select-text user-select-text">
+        {{chapters.content}}
+      </text>
+      
+      <!-- 下一章按钮 -->
+      <view 
+        wx:if='{{chapters.orderIndex}}' 
+        catch:tap='nextChapter' 
+        class="mt-32rpx btn btn-primary btn-md  text-center shadow-sm"
+      >下一章</view>
+      
+      <!-- 底部留白，防止内容被菜单遮挡 -->
+      <view class="h-128rpx"></view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部菜单 (点击内容呼出) -->
+  <view 
+    class="fixed bottom-0 left-0 right-0 bg-bg-card shadow-[0_-4rpx_16rpx_rgba(0,0,0,0.05)] transition-transform duration-300 z-20 pb-[env(safe-area-inset-bottom)]"
+    style="{{showSettings ? 'transform: translateY(0);' : 'transform: translateY(100%);'}}"
+  >
+    <view class="flex justify-around items-center h-112rpx px-32rpx">
+       <view class="flex flex-col items-center justify-center space-y-1 active:opacity-60" catch:tap='previousChapter' wx:if='{{chapters.orderIndex > 1}}'>
+         <view class="i-tabler-chevron-left text-48rpx text-text-main"></view>
+         <text class="text-aux text-text-secondary">上一章</text>
+       </view>
+       
+       <view class="flex flex-col items-center justify-center space-y-1 active:opacity-60" catch:tap='showCatalog'>
+         <view class="i-tabler-list text-48rpx text-text-main"></view>
+         <text class="text-aux text-text-secondary">目录</text>
+       </view>
+       
+       <view class="flex flex-col items-center justify-center space-y-1 active:opacity-60" catch:tap='nextChapter' wx:if='{{chapters.orderIndex}}'>
+         <view class="i-tabler-chevron-right text-48rpx text-text-main"></view>
+         <text class="text-aux text-text-secondary">下一章</text>
+       </view>
+    </view>
+  </view>
+</view>
+
+<!-- 目录弹窗 -->
+<!-- 目录弹窗 -->
+<t-popup visible='{{catalogVisible}}' placement='left' bind:visible-change="onVisibleChange" bind:close="closeCatalog">
+  <view class="h-screen w-[85vw] bg-bg-page flex flex-col">
+    <!-- 头部 -->
+    <view class="box-content h-88rpx px-32rpx flex items-center justify-between bg-bg-card border-b border-border-base shrink-0" style="padding-top: {{safeAreaTop}}px">
+      <view class="flex items-baseline space-x-16rpx">
+        <text class="text-subtitle font-bold text-text-main">目录</text>
+        <text class="text-aux text-text-secondary">共 {{book.chapters.length || 0}} 章</text>
+      </view>
+      <view class="p-16rpx -mr-16rpx active:opacity-60" bind:tap="closeCatalog">
+        <view class="i-tabler-x text-48rpx text-text-secondary"></view>
+      </view>
+    </view>
+    
+    <!-- 列表 -->
+    <scroll-view 
+      scroll-y 
+      class="flex-1 h-0 bg-bg-card" 
+      scroll-into-view="{{scrollIntoViewId}}"
+      scroll-with-animation="{{false}}"
+      wx:if='{{catalogVisible}}'
+    >
+      <block wx:if='{{book.chapters && book.chapters.length}}'>
+        <view 
+            wx:for='{{book.chapters}}' 
+            wx:key='id'
+            id="chapter-{{item.id}}"
+            class="relative h-72rpx px-32rpx flex items-center border-b border-border-base text-body transition-colors active:bg-gray-50" 
+            bind:tap="onChapterClick" 
+            data-id="{{item.id}}"
+        >
+          <text class="truncate w-full {{item.id === chapters.id ? 'text-primary font-bold' : 'text-text-regular'}}">{{item.title}}</text>
+        </view>
+      </block>
+      <view wx:else class="flex flex-col items-center justify-center h-full pb-200rpx text-text-secondary text-aux">
+        <view class="i-tabler-database-off text-80rpx mb-24rpx text-gray-300"></view>
+        <text>暂无章节数据</text>
+      </view>
+    </scroll-view>
+  </view>
+</t-popup>
+
+<t-toast id="t-toast" />

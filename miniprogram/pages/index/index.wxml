@@ -1,0 +1,107 @@
+<wxs module="utils">
+  var includes = function (array, value) {
+    return array && array.indexOf(value) > -1;
+  }
+  module.exports = {
+    includes: includes
+  };
+</wxs>
+<view class="min-h-100vh bg-bg-page pb-200rpx box-border">
+  <navigation-bar title=" Azeroth-Fish" back="{{false}}"></navigation-bar>
+  <!-- Search -->
+  <view class="px-md py-sm bg-bg-page sticky top-0 z-50">
+    <t-search placeholder="搜索书籍" shape="round" />
+  </view>
+  <view class="mx-md mb-md px-16rpx py-8rpx bg-white rounded-md flex justify-between items-center shadow-sm">
+    <view class="flex items-center gap-md">
+      <view class="w-60rpx h-60rpx rounded-full flex items-center justify-center" style="background-color: #F0EBFF;">
+        <t-icon name="user" size="32rpx" color="#8B6DFF" />
+      </view>
+      <text class=" text-24rpx text-text-main">还未完善个人信息。</text>
+    </view>
+    <view class="px-32rpx py-10rpx text-24rpx rounded-full bg-primary text-white transition-colors" bindtap="toPerfectInfo">
+      去完善
+    </view>
+  </view>
+  <!-- Header Actions -->
+  <view class="flex justify-between items-center px-md py-sm">
+    <text class="text-26rpx text-text-main">书架</text>
+    <!-- Normal Mode Actions -->
+    <view class="flex gap-md" wx:if="{{!selecting}}">
+      <view class="flex items-center gap-xs" bindtap="importBook">
+        <t-icon name="add" size="40rpx" color="#8B6DFF" />
+        <text class="text-body text-primary">导入</text>
+      </view>
+      <view class="flex items-center gap-xs" bindtap="enterSelectMode">
+        <t-icon name="view-list" size="40rpx" color="#666666" />
+        <text class="text-body text-text-regular">选择</text>
+      </view>
+    </view>
+    <!-- Selection Mode Actions -->
+    <view class="flex gap-md items-center" wx:else>
+      <text class="text-body text-primary" bindtap="selectAll">全选</text>
+      <text class="text-body text-text-regular" bindtap="cancelSelect">取消</text>
+    </view>
+  </view>
+  <view class="px-md py-xs mb-sm" wx:if="{{selecting}}">
+    <text class="text-aux text-text-secondary">已选择 {{selectedList.length}} 本书籍</text>
+  </view>
+  <!-- Selection Status -->
+  <view wx:if="{{selecting}}" class="px-md py-xs mb-sm">
+    <text class="text-aux text-text-secondary">已选择 {{selectedList.length}} 本书籍</text>
+  </view>
+  <!-- Book Grid -->
+  <view class="grid grid-cols-3 gap-md px-md">
+    <view wx:for="{{list}}" wx:key="id" class="relative flex flex-col gap-xs" data-id="{{item.id}}" bindtap="handleBookClick" bindlongpress="handleBookLongPress">
+      <!-- Book Cover Container -->
+      <view class="relative w-full rounded-md overflow-hidden shadow-sm bg-bg-card" style="padding-top: 133%;">
+        <image src="{{item.cover || 'https://wantapp-1303245534.cos.ap-nanjing.myqcloud.com/uploads/book-cover.png?123'}}" mode="aspectFill" class="absolute top-0 left-0 w-full h-full transition-transform duration-300" />
+        <!-- Selection Indicator -->
+        <view wx:if="{{selecting}}" class="absolute top-12rpx right-12rpx z-10">
+          <!-- Selected State -->
+          <view wx:if="{{utils.includes(selectedList, item.id)}}" class="rounded-full bg-white flex items-center justify-center shadow-md overflow-hidden">
+            <t-icon name="check-circle-filled" size="48rpx" color="#8B6DFF" />
+          </view>
+          <!-- Unselected State -->
+          <view wx:else class="w-48rpx h-48rpx rounded-full border-2 border-white/90 bg-black/20 backdrop-blur-[2px] shadow-sm box-border"></view>
+        </view>
+        <!-- Dim Overlay when selecting -->
+        <view wx:if="{{selecting}}" class="absolute inset-0 bg-black/20 pointer-events-none transition-opacity duration-200"></view>
+      </view>
+      <!-- Book Title -->
+      <text class="text-body text-text-main truncate text-center">{{item.title}}</text>
+    </view>
+  </view>
+  <!-- Empty State -->
+  <view wx:if="{{noData}}" class="flex flex-col items-center justify-center py-xl mt-xl text-text-secondary">
+    <view class="i-tabler-books text-6xl mb-sm text-gray-300"></view>
+    <text class="text-aux">书架空空如也</text>
+  </view>
+  <view wx:if="{{!isLogin}}" class="flex flex-col items-center justify-center bg-white py-60rpx mx-120rpx rounded-md">
+    <image src="https://wantapp-1303245534.cos.ap-nanjing.myqcloud.com/uploads/logo.png" mode="aspectFit" class="mb-xl" style="width: 240rpx; height: 240rpx;" />
+    <view class="text-body text-text-regular mb-xl font-medium">登录后开始摸鱼吧</view>
+    <t-button theme="primary" size="small" shape="round" class="w-280rpx" bindtap="login">
+      立即登录
+    </t-button>
+  </view>
+</view>
+<!-- Bottom Action Bar (Fixed) -->
+<view wx:if="{{selecting}}" class="fixed bottom-0 left-0 right-0 bg-bg-card shadow-[0_-8rpx_24rpx_rgba(0,0,0,0.05)] pb-[calc(10rpx+env(safe-area-inset-bottom))] z-50 border-t border-border-base">
+  <view class="flex items-center h-120rpx">
+    <!-- 移除按钮 -->
+    <view class="flex-1 h-full flex flex-col items-center justify-center active:bg-gray-50 transition-colors" bindtap="onDeleteBook">
+      <view class="i-tabler-trash text-48rpx text-red mb-6rpx"></view>
+      <text class="text-24rpx text-text-regular">移除书架</text>
+    </view>
+    <!-- 垂直分割线 -->
+    <view class="w-2rpx h-48rpx bg-border-base"></view>
+    <!-- 下载按钮 -->
+    <view class="flex-1 h-full flex flex-col items-center justify-center active:bg-gray-50 transition-colors" bindtap="downloadSelectedBooks">
+      <view class="i-tabler-download text-48rpx text-primary mb-6rpx"></view>
+      <text class="text-24rpx text-text-regular">下载本地</text>
+    </view>
+  </view>
+</view>
+<t-dialog visible="{{showDialog}}" title="提示" content="确定移除书架？" confirm-btn="{{ { content: '确定', variant: 'base', theme: 'danger' } }}" cancel-btn="取消" bind:confirm="deleteBook" bind:cancel="cancelDelete" />
+<t-dialog visible="{{showDownloadDialog}}" title="提示" content="确定下载本地？" confirm-btn="确定" cancel-btn="取消" bind:confirm="confirmDownload" bind:cancel="cancelDownload" />
+<t-toast id="t-toast" />

@@ -1,0 +1,15 @@
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #F5F6F8;
+}
+
+/* 
+   Retaining manual dark mode styles for the container itself 
+   as utility classes 'dark:' modifier typically applies to descendants 
+*/
+.dark {
+  background-color: #1a1a1a !important;
+  color: #ccc !important;
+}
