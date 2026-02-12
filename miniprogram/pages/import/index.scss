@@ -1,1 +1,334 @@
 /* pages/import/index.wxss */
+.page-container {
+  height: 100vh; /* 强制占满屏幕高度 */
+  background-color: #F5F6F8; /* 规范背景色 */
+  position: relative;
+  overflow: hidden; /* 禁止页面滚动 */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* 顶部背景装饰 */
+.bg-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 42vh; /* 稍微减小高度，给下方留出更多空间 */
+  /* 规范主渐变: linear-gradient(90deg, #B4C0FF 0%, #8E9EFF 100%) */
+  background: linear-gradient(135deg, #B4C0FF 0%, #8E9EFF 100%); 
+  border-bottom-left-radius: 48rpx;
+  border-bottom-right-radius: 48rpx;
+  z-index: 0;
+}
+
+/* 头部 */
+.header {
+  position: relative;
+  z-index: 1;
+  padding: 0 40rpx 20rpx; /* 上padding由行内样式控制 */
+  color: #fff;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 48rpx; /* 规范标题 */
+  font-weight: 600;
+  margin-bottom: 12rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+}
+
+.subtitle {
+  font-size: 28rpx; /* 规范辅助文字 */
+  opacity: 0.9;
+  letter-spacing: 2rpx;
+  font-weight: 400;
+}
+
+/* 步骤指示器 */
+.process-steps {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10rpx 60rpx 30rpx;
+  flex-shrink: 0;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.6;
+  transition: all 0.3s;
+}
+
+.step-item.active {
+  opacity: 1;
+  transform: translateY(-2rpx);
+}
+
+.step-icon-wrap {
+  width: 88rpx;
+  height: 88rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 32rpx; /* 方圆形，更现代 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.step-item.active .step-icon-wrap {
+  background: #fff;
+  border-color: #fff;
+  color: #8B6DFF;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+.step-icon {
+  font-size: 40rpx;
+}
+
+.step-text {
+  font-size: 24rpx;
+  color: #fff;
+  font-weight: 500;
+}
+
+.step-line {
+  flex: 1;
+  height: 2rpx;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 0 24rpx -40rpx;
+}
+
+/* 主操作卡片 */
+.main-card {
+  position: relative;
+  z-index: 2;
+  margin: 0 32rpx 40rpx; /* 左右32rpx(规范16px) */
+  background: #FFFFFF;
+  border-radius: 40rpx;
+  box-shadow: 0 20rpx 60rpx rgba(112, 82, 204, 0.1); /* 使用深邃紫的阴影 */
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 0; /* 关键：允许flex项收缩 */
+}
+
+.card-content {
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* 上传/预览区域 */
+.upload-area {
+  background-color: #F8F9FC; /* 极浅的背景 */
+  border: 4rpx dashed #E0E0E0; /* 规范分割线颜色 */
+  border-radius: 32rpx;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  margin-bottom: 40rpx;
+}
+
+.upload-area:active {
+  background-color: #F0F2F5;
+  border-color: #8B6DFF;
+  transform: scale(0.99);
+}
+
+.upload-area.has-image {
+  border-style: solid;
+  border-color: transparent;
+  padding: 0;
+  background-color: #000;
+}
+
+.placeholder-icon {
+  font-size: 80rpx;
+  color: #8B6DFF;
+  margin-bottom: 32rpx;
+  font-weight: 300;
+  background: rgba(139, 109, 255, 0.1);
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-text {
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: 600;
+  margin-bottom: 16rpx;
+}
+
+.placeholder-tip {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 按钮样式 */
+.action-buttons {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.btn-primary {
+  /* 规范主渐变: linear-gradient(90deg, #B4C0FF 0%, #8E9EFF 100%) */
+  background: linear-gradient(90deg, #B4C0FF 0%, #8E9EFF 100%);
+  color: #fff;
+  border-radius: 56rpx;
+  font-size: 34rpx;
+  font-weight: 600;
+  height: 108rpx;
+  line-height: 108rpx;
+  box-shadow: 0 16rpx 32rpx rgba(139, 109, 255, 0.25);
+  border: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 2rpx;
+}
+
+.btn-secondary {
+  background: #F5F6F8;
+  color: #666666;
+  border-radius: 56rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  height: 108rpx;
+  line-height: 108rpx;
+  border: none;
+  flex: 1;
+}
+
+.btn-group {
+  display: flex;
+  gap: 24rpx;
+}
+
+.btn-hover {
+  transform: scale(0.98);
+  opacity: 0.95;
+}
+
+.btn-text {
+  margin-top: 24rpx;
+  background: transparent;
+  color: #999999;
+  font-size: 28rpx;
+  border: none;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-text:after {
+  border: none;
+}
+
+/* 弹窗样式优化 */
+.popup-container {
+  background: #fff;
+  border-top-left-radius: 40rpx;
+  border-top-right-radius: 40rpx;
+  padding: 56rpx 40rpx;
+  overflow: hidden;
+}
+
+.popup-header {
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 56rpx;
+}
+
+.popup-options {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 40rpx;
+}
+
+.popup-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.option-icon {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56rpx;
+  transition: transform 0.2s;
+}
+
+/* 使用规范的淡色背景 */
+/* 聊天记录 - 类似天空青 #5AD8F2 的淡化 */
+.popup-option:nth-child(1) .option-icon {
+    background: #E6F7FF;
+    color: #1890FF;
+}
+
+/* 相册 - 类似甜心粉 #FF85C0 的淡化 */
+.popup-option:nth-child(2) .option-icon {
+    background: #FFF0F6;
+    color: #EB2F96;
+}
+
+/* 拍照 - 类似主色 #8B6DFF 的淡化 */
+.popup-option:nth-child(3) .option-icon {
+    background: #F0F5FF;
+    color: #722ED1;
+}
+
+.option-hover .option-icon {
+  transform: scale(1.08);
+}
+
+.popup-option text {
+  font-size: 28rpx;
+  color: #666666;
+  font-weight: 500;
+}
+
+.popup-cancel {
+  margin-top: 20rpx;
+  text-align: center;
+  padding: 32rpx;
+  border-top: 2rpx solid #F0F0F0;
+  color: #999999;
+  font-size: 32rpx;
+}

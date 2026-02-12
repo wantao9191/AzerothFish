@@ -1,2 +1,88 @@
-<!--pages/import/index.wxml-->
-<text>pages/import/index.wxml</text>
+<!-- pages/import/index.wxml -->
+<view class="page-container">
+  <!-- 顶部背景装饰 -->
+  <view class="bg-decoration"></view>
+
+  <!-- 头部区域 -->
+  <view class="header" style="padding-top: {{paddingTop}}px;">
+    <view class="header-content">
+      <view class="title">作业文集助手</view>
+      <view class="subtitle">拍照上传，一键生成精美电子文集</view>
+    </view>
+  </view>
+
+  <!-- 步骤指示器 -->
+  <view class="process-steps">
+    <view class="step-item active">
+      <view class="step-icon-wrap">
+        <text class="step-icon">📸</text>
+      </view>
+      <text class="step-text">上传图片</text>
+    </view>
+    <view class="step-line"></view>
+    <view class="step-item">
+      <view class="step-icon-wrap">
+        <text class="step-icon">✨</text>
+      </view>
+      <text class="step-text">生成文集</text>
+    </view>
+    <view class="step-line"></view>
+    <view class="step-item">
+      <view class="step-icon-wrap">
+        <text class="step-icon">📤</text>
+      </view>
+      <text class="step-text">导出分享</text>
+    </view>
+  </view>
+
+  <!-- 主操作卡片 -->
+  <view class="main-card">
+    <view class="card-content">
+      <!-- 图片预览/上传区域 -->
+      <view class="upload-area {{imageSrc ? 'has-image' : ''}}" bind:tap="showPopup">
+        <block wx:if="{{!imageSrc}}">
+          <view class="placeholder-icon">+</view>
+          <view class="placeholder-text">点击上传作文/试卷</view>
+          <view class="placeholder-tip">支持相册、拍照、聊天记录导入</view>
+        </block>
+        <image wx:else src="{{imageSrc}}" mode="aspectFit" class="preview-image" />
+      </view>
+
+      <!-- 操作按钮区域 -->
+      <view class="action-buttons">
+        <block wx:if="{{!imageSrc}}">
+          <button class="btn-primary" hover-class="btn-hover" bind:tap="showPopup">立即导入</button>
+        </block>
+        <block wx:else>
+          <view class="btn-group">
+            <button class="btn-secondary" hover-class="btn-hover" bind:tap="showPopup">重新上传</button>
+            <button class="btn-primary" hover-class="btn-hover" bind:tap="handleGenerate">开始生成</button>
+          </view>
+          <button class="btn-text" hover-class="btn-text-hover" bind:tap="showPopup">修改图片</button>
+        </block>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 底部弹窗 -->
+<t-popup visible="{{popupVisible}}" placement="bottom" bind:visible-change="onVisibleChange">
+  <view class="popup-container">
+    <view class="popup-header">选择导入方式</view>
+    <view class="popup-options">
+      <view class="popup-option" hover-class="option-hover" bind:tap="chooseFromChat">
+        <view class="option-icon" style="background: #E8F3FF;">💬</view>
+        <text>从聊天记录选择</text>
+      </view>
+      <view class="popup-option" hover-class="option-hover" bind:tap="chooseFromAlbum">
+        <view class="option-icon" style="background: #FFF0F6;">🖼️</view>
+        <text>从相册选择</text>
+      </view>
+      <view class="popup-option" hover-class="option-hover" bind:tap="chooseFromCamera">
+        <view class="option-icon" style="background: #F0F5FF;">📷</view>
+        <text>拍照</text>
+      </view>
+    </view>
+    <view class="popup-cancel" bind:tap="closePopup">取消</view>
+  </view>
+</t-popup>

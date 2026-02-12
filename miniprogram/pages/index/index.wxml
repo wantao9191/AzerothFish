@@ -12,7 +12,7 @@
   <view class="px-md py-sm bg-bg-page sticky top-0 z-50">
     <t-search placeholder="搜索书籍" shape="round" />
   </view>
-  <view class="mx-md mb-md px-16rpx py-8rpx bg-white rounded-md flex justify-between items-center shadow-sm">
+  <view class="mx-md mb-md px-16rpx py-8rpx bg-white rounded-md flex justify-between items-center shadow-sm" wx:if="{{isLogin}}">
     <view class="flex items-center gap-md">
       <view class="w-60rpx h-60rpx rounded-full flex items-center justify-center" style="background-color: #F0EBFF;">
         <t-icon name="user" size="32rpx" color="#8B6DFF" />
