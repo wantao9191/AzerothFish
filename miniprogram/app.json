@@ -34,6 +34,9 @@
     "t-loading": "tdesign-miniprogram/loading/loading",
     "t-progress": "tdesign-miniprogram/progress/progress",
     "t-search": "tdesign-miniprogram/search/search",
-    "t-slider": "tdesign-miniprogram/slider/slider"
+    "t-slider": "tdesign-miniprogram/slider/slider",
+    "t-cascader": "tdesign-miniprogram/cascader/cascader",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-empty": "tdesign-miniprogram/empty/empty"
   }
 }

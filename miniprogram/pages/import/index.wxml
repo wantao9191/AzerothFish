@@ -2,69 +2,118 @@
 <view class="page-container">
   <!-- 顶部背景装饰 -->
   <view class="bg-decoration"></view>
-
   <!-- 头部区域 -->
-  <view class="header" style="padding-top: {{paddingTop}}px;">
+  <view class="header" style="padding-top: {{statusBarHeight}}px;">
     <view class="header-content">
       <view class="title">作业文集助手</view>
       <view class="subtitle">拍照上传，一键生成精美电子文集</view>
     </view>
   </view>
-
   <!-- 步骤指示器 -->
   <view class="process-steps">
-    <view class="step-item active">
+    <view class="step-item {{step === 0 ? 'active' : ''}}">
       <view class="step-icon-wrap">
         <text class="step-icon">📸</text>
       </view>
       <text class="step-text">上传图片</text>
     </view>
     <view class="step-line"></view>
-    <view class="step-item">
+    <view class="step-item {{step === 1 ? 'active' : ''}}">
       <view class="step-icon-wrap">
         <text class="step-icon">✨</text>
       </view>
       <text class="step-text">生成文集</text>
     </view>
     <view class="step-line"></view>
-    <view class="step-item">
+    <view class="step-item {{step === 2 ? 'active' : ''}}">
       <view class="step-icon-wrap">
         <text class="step-icon">📤</text>
       </view>
       <text class="step-text">导出分享</text>
     </view>
   </view>
-
   <!-- 主操作卡片 -->
   <view class="main-card">
     <view class="card-content">
-      <!-- 图片预览/上传区域 -->
-      <view class="upload-area {{imageSrc ? 'has-image' : ''}}" bind:tap="showPopup">
-        <block wx:if="{{!imageSrc}}">
-          <view class="placeholder-icon">+</view>
-          <view class="placeholder-text">点击上传作文/试卷</view>
-          <view class="placeholder-tip">支持相册、拍照、聊天记录导入</view>
-        </block>
-        <image wx:else src="{{imageSrc}}" mode="aspectFit" class="preview-image" />
-      </view>
-
+      <block wx:if="{{step === 0}}">
+        <!-- 图片预览/上传区域 -->
+        <view class="image-list" wx:if="{{imageList.length > 0}}">
+          <view class="image-item" wx:for="{{imageList}}" wx:key="key">
+            <image wx:if="{{item.status === 'uploaded'}}" src="{{item.url}}" mode="aspectFill" class="preview-image" />
+            <view class="image-item-delete" wx:if="{{item.status === 'uploaded'}}" bind:tap="deleteImage" data-key="{{item.key}}">
+              ✕
+            </view>
+            <view class="image-item-loading" wx:if="{{item.status === 'uploading'}}">上传中...</view>
+            <view class="image-item-failed" wx:if="{{item.status === 'failed'}}">上传失败</view>
+          </view>
+          <view class="image-item" wx:if="{{imageList.length < 9}}" bind:tap="showPopup">
+            <view class="add-icon-wrapper">
+              <t-icon name="add" size="48rpx" color="#8B6DFF" />
+            </view>
+          </view>
+        </view>
+        <view class="empty-container" wx:else>
+          <t-empty description="上传作文图片，立即生成精美电子文集" />
+          <view class="add-button" bind:tap="showPopup">
+            <t-icon name="add" size="64rpx" color="#8B6DFF" />
+          </view>
+        </view>
+        <!-- 配置选项区域 -->
+        <view class="config-section">
+          <!-- 选择年级 -->
+          <t-cell title="选择年级" note="{{selectedLevel || '请选择'}}" arrow hover bind:click="showLevelPicker" />
+          <!-- 选择格式 -->
+          <t-cell title="选择格式" note="{{selectedFormat || '请选择'}}" arrow hover bind:click="showFormatPicker" />
+        </view>
+      </block>
+      <block wx:if="{{step === 1}}">
+        <view class="step-data" wx:for="{{stepDatas}}" wx:key="key">
+          <view class="step-data-item">
+            <text class="step-data-item-title">{{stepTypes[item.type]}}</text>
+            <text class="step-data-item-content">{{stepStatus[item.step]}}</text>
+          </view>
+        </view>
+      </block>
+      <block wx:if="{{step === 2}}">
+        <view class="article-list">
+          <view class="article-item" wx:for="{{articles}}" wx:key="index">
+            <text class="article-item-title">作文 {{index + 1}}</text>
+            <view class="article-item-content">
+              <text class="article-item-content-text">{{item.content}}</text>
+            </view>
+            <view class="article-item-content">
+              <text class="article-item-content-text">{{item.review}}</text>
+            </view>
+          </view>
+        </view>
+      </block>
       <!-- 操作按钮区域 -->
       <view class="action-buttons">
-        <block wx:if="{{!imageSrc}}">
-          <button class="btn-primary" hover-class="btn-hover" bind:tap="showPopup">立即导入</button>
+        <block wx:if="{{step === 0}}">
+          <button class="btn-primary" hover-class="btn-hover" wx:if="{{canGenerate}}" bind:tap="handleGenerate">
+            🚀 开始生成
+          </button>
         </block>
-        <block wx:else>
-          <view class="btn-group">
-            <button class="btn-secondary" hover-class="btn-hover" bind:tap="showPopup">重新上传</button>
-            <button class="btn-primary" hover-class="btn-hover" bind:tap="handleGenerate">开始生成</button>
+        <block wx:if="{{step === 1}}">
+          <view class="generating-tip">
+            <text class="generating-text">✨ 正在生成中，请稍候...</text>
           </view>
-          <button class="btn-text" hover-class="btn-text-hover" bind:tap="showPopup">修改图片</button>
+        </block>
+        <block wx:if="{{step === 2}}">
+          <view class="btn-group">
+            <button class="btn-secondary" hover-class="btn-hover" bind:tap="handleGenerate">
+              🔄 重新生成
+            </button>
+            <button class="btn-primary" hover-class="btn-hover" bind:tap="handleDownload">
+              📥 下载文档
+            </button>
+          </view>
         </block>
       </view>
     </view>
   </view>
 </view>
-
+<t-toast id="t-toast" />
 <!-- 底部弹窗 -->
 <t-popup visible="{{popupVisible}}" placement="bottom" bind:visible-change="onVisibleChange">
   <view class="popup-container">
@@ -86,3 +135,7 @@
     <view class="popup-cancel" bind:tap="closePopup">取消</view>
   </view>
 </t-popup>
+<!-- 年级选择器 -->
+<t-cascader visible="{{levelPickerVisible}}" value="{{levelValue}}" title="选择年级" cancelBtn="取消" confirmBtn="确定" options="{{levelList}}" keys="{{keys}}" bind:change="onLevelChange"></t-cascader>
+<!-- 格式选择器 -->
+<t-cascader visible="{{formatPickerVisible}}" value="{{formatValue}}" data-key="format" title="选择格式" cancelBtn="取消" confirmBtn="确定" options="{{formatList}}" bind:change="onFormatChange"></t-cascader>

@@ -6,8 +6,8 @@
 // 环境配置
 const ENV = {
     development: {
-        // baseUrl: ' http://localhost:3000/api',
-        baseUrl: 'https://wantapp.cn/api',
+        baseUrl: ' http://localhost:3000/api',
+        // baseUrl: 'https://wantapp.cn/api',
         env_version: 'develop',
     },
     stage: {
